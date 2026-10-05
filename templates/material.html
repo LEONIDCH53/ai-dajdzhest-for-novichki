@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.title }} — AI-дайджест{% endblock %}
+{% block description %}{{ item.lead }}{% endblock %}
+
+{% block content %}
+
+<section class="article accent-{{ item.accent }}">
+    <div class="container">
+
+        <!-- Хлебные крошки -->
+        <nav class="crumbs">
+            <a href="{{ url_for('index') }}">Главная</a>
+            <span>/</span>
+            <a href="{{ url_for('index') }}#materials">Материалы</a>
+            <span>/</span>
+            <em>{{ item.tag }}</em>
+        </nav>
+
+        <header class="article__head">
+            <span class="article__emoji">{{ item.emoji }}</span>
+            <div>
+                <div class="article__meta">
+                    <span class="card__tag">{{ item.tag }}</span>
+                    <span>◷ {{ item.time }}</span>
+                    <span>·</span>
+                    <span>{{ item.level }}</span>
+                </div>
+                <h1 class="article__title">{{ item.title }}</h1>
+                <p class="article__lead">{{ item.lead }}</p>
+            </div>
+        </header>
+
+        <!-- Коротко: что вы узнаете -->
+        <section class="article__tldr">
+            <h2 class="tldr__title">Сначала главное</h2>
+            <ul class="tldr__list">
+                {% for bullet in item.bullets %}
+                    <li><span class="tldr__check">✓</span>{{ bullet }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <div class="article__body">
+            <div class="article__content">
+
+                <h2>Что это и зачем</h2>
+                {% for paragraph in item.what %}
+                    <p>{{ paragraph }}</p>
+                {% endfor %}
+
+                <h2>Как сделать: пошагово</h2>
+                <ol class="howto">
+                    {% for step in item.steps %}
+                        <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+
+                <h2>Словарь новичка</h2>
+                <dl class="terms">
+                    {% for term, meaning in item.terms %}
+                        <div class="terms__row">
+                            <dt>{{ term }}</dt>
+                            <dd>{{ meaning }}</dd>
+                        </div>
+                    {% endfor %}
+                </dl>
+
+                <div class="practice">
+                    <span class="practice__label">Практика · 5 минут</span>
+                    <p>{{ item.practice }}</p>
+                </div>
+
+                <a class="btn btn--primary practice__link" href="{{ item.link }}" target="_blank" rel="noopener">
+                    {{ item.link_label }} <span class="btn__arrow">↗</span>
+                </a>
+            </div>
+
+            <!-- Боковая панель -->
+            <aside class="sidebar">
+                <div class="sidebar__box">
+                    <h4>Коротко</h4>
+                    <ul>
+                        {% for bullet in item.bullets %}
+                            <li>{{ bullet }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="sidebar__cta">
+                    <h4>Хотите всё и сразу?</h4>
+                    <p>Получайте 5 приёмов ИИ каждую неделю — бесплатно.</p>
+                    <a href="{{ url_for('index') }}#subscribe" class="btn btn--ghost btn--small">Подписаться</a>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Навигация: предыдущий / следующий -->
+        <nav class="pager">
+            {% if prev_material %}
+                <a class="pager__link" href="{{ url_for('material', slug=prev_material.slug) }}">
+                    <span class="pager__dir">← Предыдущий</span>
+                    <span class="pager__title">{{ prev_material.emoji }} {{ prev_material.title }}</span>
+                </a>
+            {% else %}
+                <span></span>
+            {% endif %}
+
+            {% if next_material %}
+                <a class="pager__link pager__link--next" href="{{ url_for('material', slug=next_material.slug) }}">
+                    <span class="pager__dir">Следующий →</span>
+                    <span class="pager__title">{{ next_material.emoji }} {{ next_material.title }}</span>
+                </a>
+            {% endif %}
+        </nav>
+
+        <!-- Материалы по той же теме -->
+        {% if same_tag %}
+            <section class="article__same">
+                <h2>Ещё по теме «{{ item.tag }}»</h2>
+                <div class="cards cards--compact">
+                    {% for other in same_tag %}
+                        <article class="card accent-{{ other.accent }} reveal">
+                            <header class="card__top">
+                                <span class="card__emoji">{{ other.emoji }}</span>
+                                <span class="card__tag">{{ other.tag }}</span>
+                            </header>
+                            <h3 class="card__title">{{ other.title }}</h3>
+                            <p class="card__lead">{{ other.lead }}</p>
+                            <footer class="card__bottom">
+                                <div class="card__meta"><span>◷ {{ other.time }}</span></div>
+                                <a class="btn btn--card" href="{{ url_for('material', slug=other.slug) }}">
+                                    Открыть материал <span class="btn__arrow">→</span>
+                                </a>
+                            </footer>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

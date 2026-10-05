@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ================= ГЕРОЙ ================= -->
+<section class="hero">
+    <div class="container hero__inner">
+
+        <div class="hero__text">
+            <span class="badge reveal">
+                <span class="badge__dot"></span>
+                Дайджест выходит каждую неделю · выпуск 01
+            </span>
+
+            <h1 class="hero__title reveal" style="--delay: .06s">
+                ИИ без сложных слов.<br>
+                <span class="grad">Начните сегодня</span> и получите
+                <span class="grad grad--2">первый результат за 15 минут</span>.
+            </h1>
+
+            <p class="hero__sub reveal" style="--delay: .12s">
+                10 коротких материалов для тех, кто ещё не открыл нейросеть:
+                как задавать вопросы, писать тексты, делать картинки и учиться.
+                Только практика, без регистрации и без оплаты.
+            </p>
+
+            <div class="hero__actions reveal" style="--delay: .18s">
+                <a href="#materials" class="btn btn--primary">
+                    Смотреть 10 материалов
+                    <span class="btn__arrow">→</span>
+                </a>
+                <a href="#subscribe" class="btn btn--ghost">Получить дайджест на почту</a>
+            </div>
+
+            <ul class="hero__list reveal" style="--delay: .24s">
+                <li>5–10 минут на материал</li>
+                <li>Практическое задание в каждом</li>
+                <li>Без воды и жаргона</li>
+            </ul>
+        </div>
+
+        <!-- Небольшой макет чата: показывает, о чём сайт -->
+        <div class="hero__visual reveal" style="--delay: .2s">
+            <div class="chat">
+                <div class="chat__head">
+                    <span class="chat__avatar">◆</span>
+                    <div>
+                        <strong>Новый ученик</strong>
+                        <small>первый запрос</small>
+                    </div>
+                </div>
+
+                <div class="chat__msg chat__msg--user">
+                    Объясни, как писать хорошие промпты
+                </div>
+
+                <div class="chat__msg chat__msg--ai">
+                    <span class="typing"><i></i><i></i><i></i></span>
+                    Формула простая:
+                    <b>роль</b> → <b>задача</b> → <b>детали</b> → <b>формат</b>.
+                </div>
+
+                <div class="chat__msg chat__msg--user">
+                    Покажи на примере
+                </div>
+
+                <div class="chat__msg chat__msg--ai">
+                    Ты — редактор интернет-магазина. Напиши 3 варианта приветствия для
+                    рассылки о скидке. Тон дружеский, по 2 предложения.
+                </div>
+
+                <div class="chat__typing">
+                    <span class="typing"><i></i><i></i><i></i></span>
+                </div>
+            </div>
+
+            <!-- Плавающая плашка поверх макета -->
+            <div class="chip chip--1">+ 40 минут в неделю</div>
+            <div class="chip chip--2">0 ₽ на старте</div>
+        </div>
+    </div>
+
+    <!-- Полоса с цифрами -->
+    <div class="container">
+        <div class="stats reveal">
+            {% for stat in stats %}
+                <div class="stat">
+                    <div class="stat__number">
+                        <span class="counter" data-target="{{ stat.number }}">{{ stat.number }}</span>{{ stat.suffix }}
+                    </div>
+                    <div class="stat__label">{{ stat.label }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ================= МАТЕРИАЛЫ ================= -->
+<section class="section" id="materials">
+    <div class="container">
+        <div class="section__head reveal">
+            <span class="eyebrow">Дайджест</span>
+            <h2 class="section__title">10 материалов, которые <span class="grad">меняют подход</span> к ИИ</h2>
+            <p class="section__sub">
+                Нажмите «Открыть материал» — внутри объяснение простыми словами,
+                пошаговый план, словарь терминов и мини-задание для практики.
+            </p>
+        </div>
+
+        <!-- Фильтры по темам -->
+        <div class="filters reveal" id="filters">
+            {% for category in categories %}
+                <button class="filter {% if loop.first %}is-active{% endif %}" data-filter="{{ category }}">
+                    {{ category }}
+                </button>
+            {% endfor %}
+        </div>
+
+        <!-- Сетка карточек -->
+        <div class="cards" id="cards">
+            {% for item in materials %}
+                <article class="card accent-{{ item.accent }} reveal" data-tag="{{ item.tag }}">
+                    <div class="card__glow" aria-hidden="true"></div>
+
+                    <header class="card__top">
+                        <span class="card__emoji">{{ item.emoji }}</span>
+                        <span class="card__tag">{{ item.tag }}</span>
+                    </header>
+
+                    <h3 class="card__title">{{ item.title }}</h3>
+                    <p class="card__lead">{{ item.lead }}</p>
+
+                    <ul class="card__bullets">
+                        {% for bullet in item.bullets %}
+                            <li>{{ bullet }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <footer class="card__bottom">
+                        <div class="card__meta">
+                            <span>◷ {{ item.time }}</span>
+                            <span>·</span>
+                            <span>{{ item.level }}</span>
+                        </div>
+
+                        <a class="btn btn--card" href="{{ url_for('material', slug=item.slug) }}">
+                            Открыть материал
+                            <span class="btn__arrow">→</span>
+                        </a>
+                    </footer>
+                </article>
+            {% endfor %}
+        </div>
+
+        <p class="cards-empty" id="cardsEmpty" hidden>В этой теме пока нет материалов. Выберите другую.</p>
+    </div>
+</section>
+
+<!-- ================= ПРЕИМУЩЕСТВА ================= -->
+<section class="section section--tight" id="benefits">
+    <div class="container">
+        <div class="section__head reveal">
+            <span class="eyebrow">Почему это работает</span>
+            <h2 class="section__title">Сделано так, чтобы вы <span class="grad grad--3">не бросили</span></h2>
+        </div>
+
+        <div class="benefits">
+            {% for item in benefits %}
+                <div class="benefit reveal">
+                    <span class="benefit__icon">{{ item.icon }}</span>
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.text }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ================= КАК НАЧАТЬ ================= -->
+<section class="section section--tight">
+    <div class="container">
+        <div class="steps-panel reveal">
+            <div class="steps-panel__text">
+                <span class="eyebrow">Как это устроено</span>
+                <h2 class="section__title">Три шага — и ИИ работает на вас</h2>
+                <p class="section__sub">
+                    Никакой теории на неделю. Один вечер — и у вас уже есть рабочий набор приёмов.
+                </p>
+                <a href="{{ url_for('material', slug='plan-7-dney') }}" class="btn btn--primary">
+                    Открыть план на 7 дней <span class="btn__arrow">→</span>
+                </a>
+            </div>
+
+            <ol class="steps">
+                <li>
+                    <span class="steps__num">01</span>
+                    <div>
+                        <h3>Выберите задачу</h3>
+                        <p>Не «попробовать ИИ», а конкретное дело: письмо, картинка, конспект.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="steps__num">02</span>
+                    <div>
+                        <h3>Соберите промпт</h3>
+                        <p>Роль, задача, детали, формат. Четыре части — и ответ становится точным.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="steps__num">03</span>
+                    <div>
+                        <h3>Уточняйте результат</h3>
+                        <p>«Короче», «теплее», «в виде таблицы». ИИ правит текст вместе с вами.</p>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<!-- ================= ОТЗЫВЫ ================= -->
+<section class="section section--tight" id="reviews">
+    <div class="container">
+        <div class="section__head reveal">
+            <span class="eyebrow">Отзывы</span>
+            <h2 class="section__title">Что говорят те, кто уже начал</h2>
+        </div>
+
+        <div class="reviews">
+            {% for item in reviews %}
+                <figure class="review accent-{{ item.accent }} reveal">
+                    <div class="review__stars">★★★★★</div>
+                    <blockquote>{{ item.text }}</blockquote>
+                    <figcaption>
+                        <span class="review__avatar">{{ item.avatar }}</span>
+                        {{ item.name }}
+                    </figcaption>
+                </figure>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ================= ВОПРОСЫ ================= -->
+<section class="section section--tight" id="faq">
+    <div class="container container--narrow">
+        <div class="section__head reveal">
+            <span class="eyebrow">FAQ</span>
+            <h2 class="section__title">Частые вопросы новичка</h2>
+        </div>
+
+        <div class="faq" id="faqList">
+            {% for item in faq %}
+                <details class="faq__item reveal">
+                    <summary>
+                        <span>{{ item.q }}</span>
+                        <span class="faq__icon" aria-hidden="true"></span>
+                    </summary>
+                    <div class="faq__answer">
+                        <p>{{ item.a }}</p>
+                    </div>
+                </details>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ================= ПОДПИСКА ================= -->
+<section class="section" id="subscribe">
+    <div class="container">
+        <div class="subscribe reveal">
+            <div class="subscribe__glow" aria-hidden="true"></div>
+
+            <span class="eyebrow eyebrow--dark">Бесплатно</span>
+            <h2 class="subscribe__title">
+                Один дайджест в неделю —<br>
+                и вы перестанете бояться ИИ
+            </h2>
+            <p class="subscribe__sub">
+                Пять коротких приёмов, один материал из дайджеста и мини-задание.
+            </p>
+
+            <form class="subscribe__form" action="{{ url_for('subscribe') }}" method="post" id="subscribeForm" novalidate>
+                <input type="email" name="email" id="email" placeholder="ваша@почта.ру" autocomplete="email" required>
+                <button class="btn btn--dark" type="submit">
+                    Получить дайджест <span class="btn__arrow">→</span>
+                </button>
+            </form>
+
+            <p class="subscribe__hint" id="subscribeHint">
+                Нажимая кнопку, вы соглашаетесь получать письма. Отписаться можно в один клик.
+            </p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

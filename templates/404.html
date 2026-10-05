@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Страница не найдена — AI-дайджест{% endblock %}
+
+{% block content %}
+
+<section class="section error">
+    <div class="container container--narrow">
+        <span class="error__code">404</span>
+        <h1 class="section__title">Такой страницы <span class="grad">нет</span></h1>
+        <p class="section__sub">
+            Возможно, материал переехал или адрес набран с ошибкой.
+            Начните с одного из этих:
+        </p>
+
+        <div class="cards cards--compact">
+            {% for item in materials[:3] %}
+                <article class="card accent-{{ item.accent }} reveal">
+                    <header class="card__top">
+                        <span class="card__emoji">{{ item.emoji }}</span>
+                        <span class="card__tag">{{ item.tag }}</span>
+                    </header>
+                    <h3 class="card__title">{{ item.title }}</h3>
+                    <footer class="card__bottom">
+                        <div class="card__meta"><span>◷ {{ item.time }}</span></div>
+                        <a class="btn btn--card" href="{{ url_for('material', slug=item.slug) }}">
+                            Открыть материал <span class="btn__arrow">→</span>
+                        </a>
+                    </footer>
+                </article>
+            {% endfor %}
+        </div>
+
+        <div class="error__actions">
+            <a href="{{ url_for('index') }}" class="btn btn--primary">На главную <span class="btn__arrow">→</span></a>
+            <a href="{{ url_for('index') }}#materials" class="btn btn--ghost">Все 10 материалов</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

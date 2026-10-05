@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI-дайджест для новичков — 10 материалов, чтобы начать{% endblock %}</title>
+    <meta name="description" content="{% block description %}Короткие понятные материалы об ИИ для тех, кто начинает: промпты, ассистенты, картинки, учёба и работа. Без жаргона и без оплаты.{% endblock %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+
+    <!-- Мягкое цветовое свечение на фоне -->
+    <div class="aurora" aria-hidden="true">
+        <span class="aurora__blob aurora__blob--1"></span>
+        <span class="aurora__blob aurora__blob--2"></span>
+        <span class="aurora__blob aurora__blob--3"></span>
+    </div>
+    <div class="grid-lines" aria-hidden="true"></div>
+
+    <a href="#main" class="skip-link">Перейти к содержимому</a>
+
+    <!-- Шапка -->
+    <header class="header" id="top">
+        <div class="container header__inner">
+            <a class="logo" href="{{ url_for('index') }}">
+                <span class="logo__mark">◆</span>
+                <span class="logo__text">AI<span>Дайджест</span></span>
+            </a>
+
+            <nav class="nav" id="nav">
+                <a href="#materials">Материалы</a>
+                <a href="#benefits">Почему это</a>
+                <a href="#faq">Вопросы</a>
+                <a href="#subscribe" class="nav__cta">Получить дайджест</a>
+            </nav>
+
+            <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Сообщения после отправки формы -->
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-wrap">
+                    {% for category, message in messages %}
+                        <div class="flash flash--{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <main id="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Подвал -->
+    <footer class="footer">
+        <div class="container footer__inner">
+            <div class="footer__col">
+                <a class="logo" href="{{ url_for('index') }}">
+                    <span class="logo__mark">◆</span>
+                    <span class="logo__text">AI<span>Дайджест</span></span>
+                </a>
+                <p class="footer__text">Короткие материалы об ИИ для тех, кто начинает. Без воды, без оплаты, без технического бэкграунда.</p>
+            </div>
+
+            <div class="footer__col">
+                <h4>Разделы</h4>
+                <a href="#materials">10 материалов</a>
+                <a href="#benefits">Почему это работает</a>
+                <a href="#reviews">Отзывы</a>
+                <a href="#faq">Вопросы и ответы</a>
+            </div>
+
+            <div class="footer__col">
+                <h4>Начать с этого</h4>
+                <a href="{{ url_for('material', slug='chto-takoe-ii') }}">Что такое ИИ</a>
+                <a href="{{ url_for('material', slug='prompty') }}">Как писать промпты</a>
+                <a href="{{ url_for('material', slug='plan-7-dney') }}">План на 7 дней</a>
+            </div>
+
+            <div class="footer__col">
+                <h4>Подписка</h4>
+                <a href="#subscribe">Раз в неделю</a>
+                <a href="#subscribe">Без спама</a>
+                <a href="#subscribe">Отписаться в один клик</a>
+            </div>
+        </div>
+
+        <div class="container footer__bottom">
+            <span>© 2026 AI-дайджест. Учебный проект на Flask.</span>
+            <span class="footer__note">Ссылки ведут на официальные сайты сервисов. Все сервисы бесплатны в базовой версии.</span>
+        </div>
+    </footer>
+
+    <a href="#top" class="to-top" id="toTop" aria-label="Наверх">↑</a>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

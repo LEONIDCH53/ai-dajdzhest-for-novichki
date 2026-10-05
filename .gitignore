@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Flask
+instance/
+.env
+.flaskenv
+
+# Инструменты и редакторы
+.vscode/
+.idea/
+*.swp
+
+# Система
+.DS_Store
+Thumbs.db
+desktop.ini
